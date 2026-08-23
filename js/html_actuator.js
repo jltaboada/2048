@@ -1,3 +1,18 @@
+var tileImages = {
+  1: "img/tiles/1.png",
+  2: "img/tiles/2.png",
+  4: "img/tiles/4.png",
+  8: "img/tiles/8.png",
+  16: "img/tiles/16.png",
+  32: "img/tiles/32.png",
+  64: "img/tiles/64.png",
+  128: "img/tiles/128.png",
+  256: "img/tiles/256.png",
+  512: "img/tiles/512.png",
+  1024: "img/tiles/1024.png",
+  2048: "img/tiles/2048.png"
+};
+
 function HTMLActuator() {
   this.tileContainer    = document.querySelector(".tile-container");
   this.scoreContainer   = document.querySelector(".score-container");
@@ -26,9 +41,9 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
 
     if (metadata.terminated) {
       if (metadata.over) {
-        self.message(false); // You lose
+        self.message(false); // Has perdido
       } else if (metadata.won) {
-        self.message(true); // You win!
+        self.message(true); // Has ganado
       }
     }
 
@@ -62,7 +77,19 @@ HTMLActuator.prototype.addTile = function (tile) {
   this.applyClasses(wrapper, classes);
 
   inner.classList.add("tile-inner");
-  inner.textContent = tile.value;
+
+  if (tileImages[tile.value]) {
+    var image = document.createElement("img");
+    image.src = tileImages[tile.value];
+    image.alt = tile.value;
+    image.onerror = function () {
+      inner.removeChild(image);
+      inner.textContent = tile.value;
+    };
+    inner.appendChild(image);
+  } else {
+    inner.textContent = tile.value;
+  }
 
   if (tile.previousPosition) {
     // Make sure that the tile gets rendered in the previous position first
@@ -126,7 +153,7 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
 
 HTMLActuator.prototype.message = function (won) {
   var type    = won ? "game-won" : "game-over";
-  var message = won ? "You win!" : "Game over!";
+  var message = won ? "ENHORABUENA!" : "LO SIENTO, HAS PERDIDO";
 
   this.messageContainer.classList.add(type);
   this.messageContainer.getElementsByTagName("p")[0].textContent = message;
