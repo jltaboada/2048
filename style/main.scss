@@ -107,11 +107,11 @@ h1.title {
 }
 
 .score-container:after {
-  content: "Score";
+  content: "Puntos";
 }
 
 .best-container:after {
-  content: "Best";
+  content: "Mejor";
 }
 
 p {
@@ -323,6 +323,15 @@ hr {
     z-index: 10;
 
     font-size: 55px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      border-radius: $tile-border-radius;
+    }
   }
 
   // Movement transition
