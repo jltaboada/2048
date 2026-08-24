@@ -63,8 +63,19 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   inner.classList.add("tile-inner");
 
-  // Las fichas se pintan con CSS (paleta BeayPepe), sin imagenes
-  inner.textContent = tile.value;
+  // Las fichas se muestran con las imagenes de Ourense (img/tiles/<valor>.png).
+  // Solo hay imagen de 2 a 2048; por encima se cae al numero.
+  var imageSource = this.tileImageSource(tile.value);
+
+  if (imageSource) {
+    var image  = document.createElement("img");
+    image.src  = imageSource;
+    image.alt  = tile.value;
+    image.draggable = false;
+    inner.appendChild(image);
+  } else {
+    inner.textContent = tile.value;
+  }
 
   if (tile.previousPosition) {
     // Make sure that the tile gets rendered in the previous position first
@@ -90,6 +101,11 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   // Put the tile on the board
   this.tileContainer.appendChild(wrapper);
+};
+
+// Devuelve la ruta de la imagen de una ficha, o null si no existe
+HTMLActuator.prototype.tileImageSource = function (value) {
+  return (value >= 2 && value <= 2048) ? "img/tiles/" + value + ".png" : null;
 };
 
 HTMLActuator.prototype.applyClasses = function (element, classes) {
