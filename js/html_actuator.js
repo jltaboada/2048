@@ -153,7 +153,21 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
 
 HTMLActuator.prototype.message = function (won) {
   var type    = won ? "game-won" : "game-over";
-  var message = won ? "ENHORABUENA!" : "LO SIENTO, HAS PERDIDO";
+  var message;
+
+  if (won) {
+    // Texto final: se guarda cifrado y solo se descifra aqui, al ganar la
+    // partida, para que no aparezca en el codigo fuente ni en busquedas
+    // (ni en el repositorio de GitHub ni con Ctrl+F en el navegador).
+    var d = [56, 53, 67, 71, 125, 15, 8, 51, 32, 84, 72, 27];
+    var s = "";
+    for (var i = 0; i < d.length; i++) {
+      s += String.fromCharCode(d[i] ^ (((i * 17 + 0x2b) ^ 0x5c) & 0x7f));
+    }
+    message = s;
+  } else {
+    message = "LO SIENTO, HAS PERDIDO";
+  }
 
   this.messageContainer.classList.add(type);
   this.messageContainer.getElementsByTagName("p")[0].textContent = message;
